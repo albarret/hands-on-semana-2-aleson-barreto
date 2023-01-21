@@ -2,13 +2,25 @@ server:
   port: 8080
   name: "Body Mass Menager"
 
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: ${MONGODB_CONNECTION_STRING}
+---
+
 spring:
   config:
     activate:
       on-profile: dev
   data:
-    auto-index-creation: true
-    uri: mongodb://192.168.15.23:27017/imc-calculator?retryWrites=true&w=majority
+    mongodb:
+      uri: mongodb://localhost:27017/imc-menager?retryWrites=true&w=majority
+      auto-index-creation: true
 
 
 

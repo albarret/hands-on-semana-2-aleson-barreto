@@ -5,19 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class ImcBaseDto {
+public class ImcDto {
+
     private UUID id;
-    private float bodyMass;
-    private float height;
+    private UUID mesurementId;
+    private UUID clientId;
+    private Double imc;
     private String classification;
     private String obesityLevel;
-    private UUID client;
-    private LocalDateTime mesurementDate;
 }

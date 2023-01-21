@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.eldorado.microservice</groupId>
-    <artifactId>eldorado-app</artifactId>
+    <artifactId>imc-menager-app</artifactId>
     <version>0.0.1</version>
     <name>service-eldorado-v1</name>
-    <description>Aula Pratica Sprint</description>
+    <description>Hands-on-week-2</description>
     <properties>
         <java.version>18</java.version>
     </properties>

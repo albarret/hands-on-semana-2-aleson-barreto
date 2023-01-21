@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,8 +14,13 @@ import java.util.List;
 @Data
 public class ClientDto {
 
+    private UUID id;
     private String name;
-    private Integer gymMonthFrequency;
     private String gender;
-    private List<ImcBaseDto> imcs;
+    private String identificationNumber;
+    private String birthDate;
+    private Integer gymMonthFrequency;
+    private String phoneNumber;
+    private String address;
+    private List<MeasurementDto> measurements;
 }

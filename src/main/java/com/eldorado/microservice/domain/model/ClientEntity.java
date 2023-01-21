@@ -1,9 +1,6 @@
 package com.eldorado.microservice.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,16 +10,21 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document("client")
-public class Client {
+@Document(collection = "client")
+public class ClientEntity {
 
     @Id
     private UUID id;
+    @NonNull
     private String name;
+    @NonNull
     private String gender;
     private String identificationNumber;
-    private String bithDate;
+    @NonNull
+    private String birthDate;
+    @NonNull
     private Integer gymMonthFrequency;
     private String phoneNumber;
+    @NonNull
     private String address;
 }

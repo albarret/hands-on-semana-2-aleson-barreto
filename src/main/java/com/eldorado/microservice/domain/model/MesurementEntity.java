@@ -7,19 +7,20 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
-@Document("imc")
-public class ImcEntity {
+@Document("measurement")
+public class MesurementEntity {
+
     @Id
     private UUID id;
-    private UUID measurementId;
+    private Double weight;
+    private Double height;
+    private LocalDateTime measurementDate;
     private UUID clientId;
-    private double imc;
-    private String classification;
-    private String obesityLevel;
 }

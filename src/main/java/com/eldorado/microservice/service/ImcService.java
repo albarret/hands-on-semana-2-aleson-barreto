@@ -2,15 +2,14 @@ package com.eldorado.microservice.service;
 
 import com.eldorado.microservice.domain.model.ImcEntity;
 import com.eldorado.microservice.domain.repository.ImcRepository;
-import com.eldorado.microservice.dto.ImcBaseDto;
+import com.eldorado.microservice.dto.ImcDto;
+import com.eldorado.microservice.dto.MeasurementDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,50 +18,67 @@ public class ImcService {
 
     private final ImcRepository imcRepository;
 
-    public ImcBaseDto saveImc(ImcBaseDto imcBaseDto) {
-
+    public ImcDto saveImc(ImcDto imcDto) {
         var imcEntity = ImcEntity.builder()
-                .id(UUID.randomUUID())
-                .bodyMass(imcBaseDto.getBodyMass())
-                .height(imcBaseDto.getHeight())
-                .classification(imcBaseDto.getClassification())
-                .obesityLevel(imcBaseDto.getObesityLevel())
-                .offsetDateTime(LocalDateTime.now())
-                .clientId(imcBaseDto.getClient()).build();
+            .imc(imcDto.getImc())
+            .classification(imcDto.getClassification())
+            .obesityLevel(imcDto.getObesityLevel())
+            .measurementId(imcDto.getMesurementId())
+            .id(imcDto.getId() != null ? imcDto.getId() : UUID.randomUUID())
+            .clientId(imcDto.getClientId()).build();
 
-
-        var imcEntitySave = imcRepository.save(imcEntity);
-
-        // upadte client document adding new bmi to the list of bmis? or does it surfice to aggregate this list if needed?
-
-        log.info("IMC SAVED WITH SUCESSEFUL {}", imcEntitySave);
-        imcBaseDto.setId(imcEntitySave.getId());
-
-        return imcBaseDto;
+        var imc = imcRepository.save(imcEntity);
+        imcDto.setId(imc.getId());
+        return imcDto;
     }
 
-    public List<ImcBaseDto> fetchAllImcForClient(UUID clientId) {
-        var clientImcs = imcRepository.findAllByClientId(clientId);
+    public List<ImcDto> fetchAllImcsForClient(UUID clientId) {
 
-        var imcDtos = clientImcs.stream().map(ci ->
-           ImcBaseDto.builder()
-                   .client(ci.getClientId())
-                   .bodyMass(ci.getBodyMass())
-                   .height(ci.getHeight())
-                   .mesurementDate(ci.getOffsetDateTime())
-                   .classification(ci.getClassification())
-                   .id(ci.getId())
-                   .obesityLevel(ci.getObesityLevel()).build()
-        ).collect(Collectors.toList());
+        return imcRepository.findByClientId(clientId).stream().map(imc ->
+                ImcDto.builder()
+                    .imc(imc.getImc())
+                    .classification(imc.getClassification())
+                    .obesityLevel(imc.getObesityLevel())
+                    .mesurementId(imc.getMeasurementId())
+                    .id(imc.getId())
+                    .clientId(imc.getClientId()).build()
+            ).toList();
 
-        log.info("IMCS FETCHED SUCESSEFULLY {}", imcDtos);
-
-        return imcDtos;
     }
 
-//    public void updateClientBodyMassAndHeight(UUID clientId, float bodyMass, float height) {
-//        var imc = imcRepository.findByClientId()
-//    }
+    public void deleteImcsByClientId(UUID clientId) {
+        imcRepository.deleteAllByClientId(clientId);
+    }
 
+    public String createImcReport(List<MeasurementDto> measurements) {
+        var report = new StringBuilder();
 
+        measurements.sort(Comparator.comparing(MeasurementDto::getMesurementDate));
+        String previousClassification = measurements.get(0).getImc().getClassification();
+        LocalDateTime previousDateTime = measurements.get(0).getMesurementDate();
+
+        for(MeasurementDto measurement: measurements) {
+            report.append(measurement.toString());
+        }
+
+        report.append("\n");
+
+        for(MeasurementDto measurement: measurements) {
+            if(!measurement.getImc().getClassification().equalsIgnoreCase(previousClassification)) {
+                report.append("Entre %s e %s, a classificação variou de %s para %s %n".formatted(
+                        previousDateTime.toLocalDate(),
+                        measurement.getMesurementDate().toLocalDate(),
+                        previousClassification,
+                        measurement.getImc().getClassification()));
+                previousDateTime = measurement.getMesurementDate();
+                previousClassification = measurement.getImc().getClassification();
+            }
+        }
+
+        return report.toString();
+    }
+
+    public void deleteImcsByMeasurementId(UUID measurementId) {
+        imcRepository.deleteByMeasurementId(measurementId);
+    }
 }
