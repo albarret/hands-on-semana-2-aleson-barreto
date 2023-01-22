@@ -1,0 +1,112 @@
+{
+	"info": {
+		"_postman_id": "40363642-0f9d-41c6-9bbe-4b06b068abff",
+		"name": "imc-menager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15799143"
+	},
+	"item": [
+		{
+			"name": "Criar ou editar cliente",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Aleson Barreto\",\r\n    \"gender\": \"m\",\r\n    \"identificationNumber\": \"00000000001\",\r\n    \"birthDate\": \"10/11/1993\",\r\n    \"gymMonthFrequency\": 20,\r\n    \"phoneNumber\": \"85000000000\",\r\n    \"address\": \"Rua Sem Nome, 0, Fortaleza\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/client",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"client"
+					]
+				},
+				"description": "Para criar um novo cliente, basta passar as informações sem passar um UUID. Para editar, basta incluir o UUID no body da requisição."
+			},
+			"response": []
+		},
+		{
+			"name": "Resgatar medições pelo id do cliente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/imc-menager/{idCliente}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"imc-menager",
+						"{idCliente}"
+					]
+				},
+				"description": "Resgata todas as medições do cliente pelo seu Id"
+			},
+			"response": []
+		},
+		{
+			"name": "Obter variações de classificação e medidas pelo id do cliente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/imc-menager/{idCliente}/report",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"imc-menager",
+						"{idCliente}",
+						"report"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Incluir uma medição para o cliente com o valor de Id",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"weight\": 95.5,\r\n    \"height\": 1.70\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/imc-menager/{idCliente}/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"imc-menager",
+						"{idCliente}",
+						""
+					]
+				},
+				"description": "Cria e edita os valores das medições passando o valor do Id do cliente na URL. Para criar, basta não incluir o valor de Id da medição no body da requisição."
+			},
+			"response": []
+		}
+	]
+}
