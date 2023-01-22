@@ -3,7 +3,7 @@
     <option name="MAIN_CLASS_NAME" value="com.eldorado.microservice.ServiceEldoradoV1Application" />
     <module name="imc-menager-app" />
     <option name="PROGRAM_PARAMETERS" value="mvn spring-boot:run" />
-    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=docker" />
+    <option name="VM_PARAMETERS" value="-Dspring.profiles.active=dev" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
